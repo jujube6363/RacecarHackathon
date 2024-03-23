@@ -6,14 +6,20 @@ using System;
 
 public class ManeuverObstacleScript : MonoBehaviour
 {
+    [SerializeField] private AudioClip MMsound;
+    private AudioSource audioSource;
     public string receivedstring;
     public CarScript carscript;
     public Rigidbody2D myRigidBody;
+    public float edge = 35;
+    public LogicScript logicscript;
+
 
     // Start is called before the first frame update
     void Start()
     {
         myRigidBody = GetComponent<Rigidbody2D>();
+        //audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -21,8 +27,9 @@ public class ManeuverObstacleScript : MonoBehaviour
     {
         try {
             // (float)int.Parse(data_stream.ReadLine());
+            //audioSource.clip = MMsound;
+            //audioSource.Play();
             float motorIn = carscript.motorIn;
-            Debug.Log(motorIn);
 
             float angle = carscript.angle;
             
@@ -31,7 +38,10 @@ public class ManeuverObstacleScript : MonoBehaviour
             Vector3 velocitys = new Vector3(-1 * (float)xVel, (float)yVel * 0, 0);
 
             velocitys *= motorIn;
+            if(!logicscript.carIsAlive) velocitys = new Vector3(0,0,0);
             myRigidBody.velocity = velocitys;
+
+
 
         } catch (Exception e) {
             Debug.Log(e);
